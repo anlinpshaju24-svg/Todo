@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="card">
+        <h1>My To-Do List</h1>
+        
+        <!-- Fixed input tag and space before method -->
+        <!-- 1. Changed action to point to 'add_todo' -->
+<form class="add-form" action="{{ url_for('add_todo') }}" method="POST">
+    
+    <!-- 2. Added name="task" and fixed the trailing period typo -->
+    <input type="text" name="task" placeholder="what needs doing?" required autofocus>
+    
+    <button type="submit" class="btn btn-primary">Add</button>
+</form>
+
+
+        {% if todos %}
+        <ul class="todo-list">
+    {% for todo in todos %}
+    <li class="todo-item">
+        <span class="task">{{ todo.task }}</span>
+        <div class="actions">
+            <!-- Edit links to edit_todo route -->
+            <!-- Change url_for from 'get_todos' to 'edit_todo' -->
+<a href="{{ url_for('edit_todo', todo_id=todo.id) }}" class="btn btn-edit">Edit</a>
+
+            
+            <!-- Delete submits to delete_todo route -->
+            <form action="{{ url_for('delete_todo', todo_id=todo.id) }}" method="POST" onsubmit="return confirm('Delete this task?');">
+                <button type="submit" class="btn btn-delete">Delete</button>
+            </form>
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+
+        {% else %}
+        <p class="empty">Nothing here yet. Add your first task above.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
